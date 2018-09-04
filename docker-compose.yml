@@ -1,0 +1,17 @@
+version: '2'
+services:
+  source-dummy_ltsc:
+    build:
+      context: ./source
+    volumes:
+    - log:/var/log
+  source-fluentd:
+    image: fluent/fluentd:latest
+    environment:
+    - 'FLUENTD_CONF=fluent.conf'
+    volumes:
+    - ./source/fluent.conf:/fluentd/etc/fluent.conf:ro
+    - log:/var/log
+volumes:
+  log:
+    driver: local
