@@ -1,4 +1,4 @@
-FROM perl:latest
+FROM perl:slim
 
 ADD scripts .
 
