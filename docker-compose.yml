@@ -5,6 +5,8 @@ services:
       context: ./source
     volumes:
     - log:/var/log
+    networks:
+    - source
   source-fluentd:
     image: fluent/fluentd:latest
     environment:
@@ -12,6 +14,13 @@ services:
     volumes:
     - ./source/fluent.conf:/fluentd/etc/fluent.conf:ro
     - log:/var/log
+    networks:
+    - source
+
 volumes:
   log:
     driver: local
+
+networks:
+  source:
+  sink:
