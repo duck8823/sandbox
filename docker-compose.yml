@@ -16,6 +16,17 @@ services:
     - log:/var/log
     networks:
     - source
+  sink-fluentd:
+    build:
+      context: ./sink
+      dockerfile: ./Dockerfile.sink.fluentd
+    environment:
+    - 'FLUENTD_CONF=fluent.conf'
+    volumes:
+    - ./sink/fluent.conf:/fluentd/etc/fluent.conf:ro
+    - log:/var/log:ro
+    networks:
+    - sink
 
 volumes:
   log:
