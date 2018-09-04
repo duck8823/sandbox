@@ -34,7 +34,7 @@ services:
     - 'POSTGRES_PASSWORD=postgres'
     volumes:
     - ./sink/initdb.d:/docker-entrypoint-initdb.d
-    - pgdata:/var/lib/postgresql/data
+#    - pgdata:/var/lib/postgresql/data
     networks:
     - sink
 

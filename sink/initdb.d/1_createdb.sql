@@ -1,1 +1,1 @@
-create database dummy_sink;
+create database dummy_database;
