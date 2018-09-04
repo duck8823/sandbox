@@ -27,11 +27,22 @@ services:
     - log:/var/log:ro
     networks:
     - sink
+  sink-rdb:
+    image: postgres
+    environment:
+    - 'POSTGRES_USER=root'
+    - 'POSTGRES_PASSWORD=postgres'
+    volumes:
+    - ./sink/initdb.d:/docker-entrypoint-initdb.d
+    - pgdata:/var/lib/postgresql/data
+    networks:
+    - sink
 
 volumes:
   log:
     driver: local
-
+  pgdata:
+    driver: local
 networks:
   source:
   sink:
