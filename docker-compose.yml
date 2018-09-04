@@ -1,6 +1,6 @@
 version: '2'
 services:
-  source-dummy_ltsc:
+  source-dummy_ltsv:
     build:
       context: ./source
     volumes:
