@@ -1,0 +1,4 @@
+FROM fluent/fluentd:v1.0-onbuild
+
+RUN apk add --update --virtual .build-deps sudo build-base ruby-dev
+RUN sudo fluent-gem install fluent-plugin-s3 -v 1.0.0 --no-document

@@ -1,4 +1,4 @@
-version: '2'
+version: '2.2'
 services:
   source-dummy_ltsv:
     build:
@@ -8,7 +8,9 @@ services:
     networks:
     - source
   source-fluentd:
-    image: fluent/fluentd:latest
+    build:
+      context: ./source
+      dockerfile: ./Dockerfile.source.fluentd
     environment:
     - 'FLUENTD_CONF=fluent.conf'
     volumes:
@@ -17,6 +19,9 @@ services:
     networks:
     - source
     - fluentd
+    - dummy_aws
+    depends_on:
+    - localstack
   sink-fluentd:
     build:
       context: ./sink
@@ -35,9 +40,18 @@ services:
     - 'POSTGRES_PASSWORD=postgres'
     volumes:
     - ./sink/initdb.d:/docker-entrypoint-initdb.d
-#    - pgdata:/var/lib/postgresql/data
+    - pgdata:/var/lib/postgresql/data
     networks:
     - sink
+  localstack:
+    image: localstack/localstack:latest
+    environment:
+    - 'SERVICES=s3,sqs'
+    networks:
+    - dummy_aws
+    ports:
+    - 8080:8080
+    - 4567-4578:4567-4578
 
 volumes:
   log:
@@ -48,3 +62,4 @@ networks:
   source:
   sink:
   fluentd:
+  dummy_aws:
