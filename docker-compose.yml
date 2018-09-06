@@ -18,10 +18,6 @@ services:
     - log:/var/log
     networks:
     - source
-    - fluentd
-    - dummy_aws
-    depends_on:
-    - localstack
   sink-fluentd:
     build:
       context: ./sink
@@ -32,7 +28,6 @@ services:
     - ./sink/fluent.conf:/fluentd/etc/fluent.conf:ro
     networks:
     - sink
-    - fluentd
   sink-rdb:
     image: postgres
     environment:
@@ -43,15 +38,6 @@ services:
     - pgdata:/var/lib/postgresql/data
     networks:
     - sink
-  localstack:
-    image: localstack/localstack:latest
-    environment:
-    - 'SERVICES=s3,sqs'
-    networks:
-    - dummy_aws
-    ports:
-    - 8080:8080
-    - 4567-4578:4567-4578
 
 volumes:
   log:
@@ -61,5 +47,3 @@ volumes:
 networks:
   source:
   sink:
-  fluentd:
-  dummy_aws:
