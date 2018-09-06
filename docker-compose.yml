@@ -3,6 +3,7 @@ services:
   source-dummy_ltsv:
     build:
       context: ./source
+      dockerfile: ./Dockerfile.dummy.logger
     volumes:
     - log:/var/log
     networks:
