@@ -4,3 +4,5 @@ RUN apk add --update --virtual .build-deps sudo build-base ruby-dev postgresql-d
 
 RUN sudo fluent-gem install bigdecimal fluent-plugin-sql --no-document
 RUN sudo fluent-gem install pg -v 0.21.0 --no-document
+
+RUN sudo fluent-gem install fluent-plugin-s3 --no-document
