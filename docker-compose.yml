@@ -1,24 +1,25 @@
 version: '2.2'
 services:
-  source-dummy_ltsv:
-    build:
-      context: ./source
-      dockerfile: ./Dockerfile.dummy.logger
-    volumes:
-    - log:/var/log
-    networks:
-    - source
-  source-fluentd:
-    build:
-      context: ./source
-      dockerfile: ./Dockerfile.source.fluentd
-    environment:
-    - 'FLUENTD_CONF=fluent.conf'
-    volumes:
-    - ./source/fluent.conf:/fluentd/etc/fluent.conf:ro
-    - log:/var/log
-    networks:
-    - source
+#  source-dummy_ltsv:
+#    build:
+#      context: ./source
+#      dockerfile: ./Dockerfile.dummy.logger
+#    volumes:
+#    - log:/var/log
+#    networks:
+#    - source
+#  source-fluentd:
+#    build:
+#      context: ./source
+#      dockerfile: ./Dockerfile.source.fluentd
+#    environment:
+#    - 'FLUENTD_CONF=fluent.conf'
+#    volumes:
+#    - ./source/fluent.conf:/fluentd/etc/fluent.conf:ro
+#    - log:/var/log
+#    networks:
+#    - source
+#    - localstack
   sink-fluentd:
     build:
       context: ./sink
@@ -29,16 +30,26 @@ services:
     - ./sink/fluent.conf:/fluentd/etc/fluent.conf:ro
     networks:
     - sink
-  sink-rdb:
-    image: postgres
-    environment:
-    - 'POSTGRES_USER=root'
-    - 'POSTGRES_PASSWORD=postgres'
-    volumes:
-    - ./sink/initdb.d:/docker-entrypoint-initdb.d
-    - pgdata:/var/lib/postgresql/data
+    - localstack
+    extra_hosts:
+    - localhost:127.0.0.1
+#  sink-rdb:
+#    image: postgres
+#    environment:
+#    - 'POSTGRES_USER=root'
+#    - 'POSTGRES_PASSWORD=postgres'
+#    volumes:
+#    - ./sink/initdb.d:/docker-entrypoint-initdb.d
+#    - pgdata:/var/lib/postgresql/data
+#    networks:
+#    - sink
+  localstack:
+    image: localstack/localstack
+    ports:
+    - 8080:8080
+    - 4567-4578:4567-4578
     networks:
-    - sink
+    - localstack
 
 volumes:
   log:
@@ -48,3 +59,4 @@ volumes:
 networks:
   source:
   sink:
+  localstack:

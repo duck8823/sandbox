@@ -1,0 +1,10 @@
+{
+  "QueueConfigurations": [
+    {
+      "QueueArn": "arn:aws:sqs:ap-northeast-1:queue:my-queue",
+        "Events": [
+          "s3:ObjectCreated:*"
+        ]
+    }
+  ]
+}
