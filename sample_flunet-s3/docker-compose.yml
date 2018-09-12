@@ -19,6 +19,7 @@ services:
     - log:/var/log
     networks:
     - source
+    - localstack
   sink-fluentd:
     build:
       context: ./sink
@@ -29,6 +30,7 @@ services:
     - ./sink/fluent.conf:/fluentd/etc/fluent.conf:ro
     networks:
     - sink
+    - localstack
   sink-rdb:
     image: postgres
     environment:
@@ -36,15 +38,34 @@ services:
     - 'POSTGRES_PASSWORD=postgres'
     volumes:
     - ./sink/initdb.d:/docker-entrypoint-initdb.d
-    - pgdata:/var/lib/postgresql/data
     networks:
     - sink
+  sink-rdb-web:
+    image: sosedoff/pgweb
+    environment:
+    - 'DATABASE_URL=postgres://root:postgres@sink-rdb:5432/postgres?sslmode=disable'
+    ports:
+    - 8081:8081
+    depends_on:
+    - sink-rdb
+    networks:
+    - sink
+  localstack:
+    image: localstack/localstack
+    environment:
+    - 'SERVICES=s3,sqs'
+    - 'HOSTNAME_EXTERNAL=localstack'
+    ports:
+    - 8080:8080
+    - 4572:4572
+    - 4576:4576
+    networks:
+    - localstack
 
 volumes:
   log:
     driver: local
-  pgdata:
-    driver: local
 networks:
   source:
   sink:
+  localstack:
