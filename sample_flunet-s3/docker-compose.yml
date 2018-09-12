@@ -40,6 +40,16 @@ services:
     - ./sink/initdb.d:/docker-entrypoint-initdb.d
     networks:
     - sink
+  sink-rdb-web:
+    image: sosedoff/pgweb
+    environment:
+    - 'DATABASE_URL=postgres://root:postgres@sink-rdb:5432/postgres?sslmode=disable'
+    ports:
+    - 8081:8081
+    depends_on:
+    - sink-rdb
+    networks:
+    - sink
   localstack:
     image: localstack/localstack
     environment:
